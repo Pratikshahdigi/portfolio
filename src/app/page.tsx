@@ -1,14 +1,19 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import VideoIntro from "@/components/VideoIntro";
+import CustomCursor from "@/components/CustomCursor";
+import RecruiterModal from "@/components/RecruiterModal";
 import styles from "./page.module.css";
 
 export default function Home() {
   const pageRef = useRef<HTMLDivElement>(null);
   const [navActive, setNavActive] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // --- Track Scroll to Toggle Header glass state or visibility ---
   useEffect(() => {
@@ -35,10 +40,6 @@ export default function Home() {
       );
 
       // Section Entrance Animations using IntersectionObserver
-      const animateSection = (selector: string, animationProps: gsap.TweenVars, triggerElement: Element) => {
-        gsap.fromTo(selector, { opacity: 0, y: 40 }, { ...animationProps, ease: "power3.out", duration: 1.0 });
-      };
-
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -53,6 +54,19 @@ export default function Home() {
                 );
                 gsap.fromTo(
                   `#about-section .${styles.sectionHeader} > *`,
+                  { opacity: 0, x: -30 },
+                  { opacity: 1, x: 0, stagger: 0.15, duration: 1.0, ease: "power3.out" }
+                );
+              }
+
+              if (target.id === "projects-section") {
+                gsap.fromTo(
+                  `.${styles.projectCard}`,
+                  { opacity: 0, y: 30 },
+                  { opacity: 1, y: 0, stagger: 0.15, duration: 0.8, ease: "power2.out" }
+                );
+                gsap.fromTo(
+                  `#projects-section .${styles.sectionHeader} > *`,
                   { opacity: 0, x: -30 },
                   { opacity: 1, x: 0, stagger: 0.15, duration: 1.0, ease: "power3.out" }
                 );
@@ -119,6 +133,12 @@ export default function Home() {
 
   return (
     <div ref={pageRef} className={styles.pageContainer}>
+      {/* Cinematic Custom Follower Cursor */}
+      <CustomCursor />
+
+      {/* Recruiter Call Booking Modal */}
+      <RecruiterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       {/* 1. Floating Glass Navigation Bar */}
       <nav className={`${styles.navbar} ${navActive ? styles.navbarVisible : ""}`}>
         <div className={styles.navLogo} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
@@ -126,6 +146,7 @@ export default function Home() {
         </div>
         <div className={styles.navLinks}>
           <a href="#about-section" className={styles.navLink}>About</a>
+          <a href="#projects-section" className={styles.navLink}>Projects</a>
           <a href="#skills-section" className={styles.navLink}>Skills</a>
           <a href="#experience-section" className={styles.navLink}>Experience</a>
           <a href="#contact-section" className={styles.navLink}>Contact</a>
@@ -133,7 +154,7 @@ export default function Home() {
       </nav>
 
       {/* 2. Fullscreen Video Hero Section */}
-      <VideoIntro />
+      <VideoIntro onScheduleCall={() => setIsModalOpen(true)} />
 
       {/* 3. About & Summary Section */}
       <div className={styles.showcaseSection} id="about-section">
@@ -170,6 +191,106 @@ export default function Home() {
             Results-driven <strong>Digital Marketing Team Leader</strong> with extensive experience leading performance marketing, SEO strategy, social media management, and paid advertising funnels. 
             I specialize in orchestrating conversion-focused campaigns across Meta, Google, and LinkedIn Ads, building efficient systems that drive lead generation, community engagement, and measurable ROI.
           </p>
+        </div>
+      </div>
+
+      {/* NEW: Project Showcase Section */}
+      <div className={styles.showcaseSection} id="projects-section">
+        <div className={styles.sectionHeader}>
+          <span>Case Studies</span>
+          <h2>Proven Marketing Campaigns & Visual Dashboards.</h2>
+        </div>
+
+        <div className={styles.projectsGrid}>
+          {/* Project Card 1 */}
+          <div className={styles.projectCard} style={{ opacity: 0 }}>
+            <div className={styles.projectImageContainer}>
+              <Image
+                src="/portfolio/seasons_dashboard.png"
+                alt="7 Seasons Resort Case Study"
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+            </div>
+            <div className={styles.projectContent}>
+              <div className={styles.projectMeta}>Hospitality Branding & Paid Ads</div>
+              <h3 className={styles.projectTitle}>7 Seasons Resort & Spa</h3>
+              <p className={styles.projectDescription}>
+                Scaled room booking inquiries via Facebook & Instagram conversational ads. Managed 5 LAC+ ad budgets.
+              </p>
+              <div className={styles.projectStatsMini}>
+                <span><strong>+45%</strong> Inquiries</span>
+                <span><strong>3.5x</strong> ROAS</span>
+              </div>
+              <Link href="/case-studies/seasons-resort" className={styles.projectLink}>
+                View Details
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* Project Card 2 */}
+          <div className={styles.projectCard} style={{ opacity: 0 }}>
+            <div className={styles.projectImageContainer}>
+              <Image
+                src="/portfolio/shreenathji_dashboard.png"
+                alt="Shreenathji Builders Case Study"
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+            </div>
+            <div className={styles.projectContent}>
+              <div className={styles.projectMeta}>Real Estate Lead Gen & CRO</div>
+              <h3 className={styles.projectTitle}>Shreenathji Builders</h3>
+              <p className={styles.projectDescription}>
+                Built mobile-first multi-step landing page qualifiers to decrease CPL and optimize homebuyer lead scores.
+              </p>
+              <div className={styles.projectStatsMini}>
+                <span><strong>450+</strong> Leads</span>
+                <span><strong>-25%</strong> CPL</span>
+              </div>
+              <Link href="/case-studies/shreenathji-builders" className={styles.projectLink}>
+                View Details
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* Project Card 3 */}
+          <div className={styles.projectCard} style={{ opacity: 0 }}>
+            <div className={styles.projectImageContainer}>
+              <Image
+                src="/portfolio/inbox_dashboard.png"
+                alt="Inbox Infotech Case Study"
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+            </div>
+            <div className={styles.projectContent}>
+              <div className={styles.projectMeta}>AI Automation & B2B Funnels</div>
+              <h3 className={styles.projectTitle}>Inbox Infotech</h3>
+              <p className={styles.projectDescription}>
+                Automated prospecting & B2B outreach scoring using custom Make.com and Generative AI workflows.
+              </p>
+              <div className={styles.projectStatsMini}>
+                <span><strong>+35%</strong> Leads</span>
+                <span><strong>60%</strong> Automated</span>
+              </div>
+              <Link href="/case-studies/inbox-infotech" className={styles.projectLink}>
+                View Details
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+                </svg>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -273,11 +394,11 @@ export default function Home() {
                 </div>
               </div>
               <ul className={styles.jobDetails}>
-                <li>Lead and coordinate a high-performing team of 5 digital marketing specialists to deliver multi-channel campaigns.</li>
-                <li>Design and implement AI-powered marketing pipelines to automate content operations, lead scoring, and campaign reporting.</li>
-                <li>Manage performance marketing initiatives across Meta Ads, Google Ads, and LinkedIn Ads, scaling leads by 35% and reducing customer acquisition costs.</li>
-                <li>Audit and execute on-page, technical, and clustering SEO strategies, driving organic traffic growth of 20%.</li>
-                <li>Plan and automate email nurturing sequences, customer behavioral triggers, and brand sentiment framework integrations.</li>
+                <li>Lead and coordinate a team of 5 marketing specialists, scaling B2B lead acquisition by 35% in first 90 days.</li>
+                <li>Engineered custom Generative AI lead enrichment & outreach workflows on Make.com, boosting automation efficiency by 60%.</li>
+                <li>Reduced B2B inbound response times from 24 hours to under 5 minutes with real-time Slack integrations.</li>
+                <li>Audited and executed SEO cluster indexing structures, boosting organic clicks by 20% and ranking major intent terms.</li>
+                <li>Oversaw all PPC campaigns, lowering qualified customer acquisition costs by 22%.</li>
               </ul>
             </div>
           </div>
@@ -297,9 +418,9 @@ export default function Home() {
                 </div>
               </div>
               <ul className={styles.jobDetails}>
-                <li>Spearheaded creative social media post-production and distribution profiles for 13 distinct brand clients.</li>
-                <li>Formulated multi-channel marketing campaigns specializing in real estate, large events, and luxury resort promotions.</li>
-                <li>Oversaw ad budgets averaging 5 LAC per month, with major campaign budgets exceeding 7 LAC+.</li>
+                <li>Managed paid ad spend portfolios averaging 5 LAC+ per month, reaching a 3.4x average ROAS for resort clients.</li>
+                <li>Designed high-converting click-to-WhatsApp Meta campaign funnels, increasing direct bookings by 30%.</li>
+                <li>Managed social media distribution, content planning, and competitor tracking for 13 premium corporate clients.</li>
               </ul>
             </div>
           </div>
@@ -319,9 +440,9 @@ export default function Home() {
                 </div>
               </div>
               <ul className={styles.jobDetails}>
-                <li>Structured advanced organic search programs, successfully boosting organic site traffic by 50%.</li>
-                <li>Managed paid Facebook and Google lead generation funnels, raising rankings for key keywords by 30%.</li>
-                <li>Executed comprehensive competitor analyses and industry benchmarks to pivot marketing operations.</li>
+                <li>Successfully boosted organic search site traffic by 50% through comprehensive on-page audits and page speed optimization.</li>
+                <li>Raised search visibility rankings for high-volume targeted keywords by 30% inside search consoles.</li>
+                <li>Executed client onboarding benchmarks, competitive intelligence audits, and weekly analytical dashboards.</li>
               </ul>
             </div>
           </div>
@@ -368,6 +489,17 @@ export default function Home() {
             <h3>LinkedIn</h3>
             <div className={styles.contactValue}>in/pratik-shahdigital</div>
           </a>
+
+          {/* Card 4: Meeting Scheduler */}
+          <button onClick={() => setIsModalOpen(true)} className={styles.contactCard} style={{ opacity: 0 }}>
+            <div className={styles.contactIcon}>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
+              </svg>
+            </div>
+            <h3>Book Meeting</h3>
+            <div className={styles.contactValue} style={{ color: "var(--accent-orange)" }}>Click to Schedule Call</div>
+          </button>
         </div>
 
         {/* Premium Portfolio Footer */}

@@ -323,6 +323,91 @@
   }
 }
 
+/* --- CTA Buttons --- */
+.ctaButtons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  z-index: 5;
+  margin-top: 1rem;
+}
+
+.ctaPrimary {
+  position: relative;
+  padding: 1rem 2.2rem;
+  background: var(--accent-orange);
+  color: #030303;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(255, 101, 0, 0.35);
+  transition: box-shadow 0.3s ease;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ctaPrimary:hover {
+  box-shadow: 0 0 40px rgba(255, 101, 0, 0.65);
+}
+
+.btnGlow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  transform: skewX(-25deg);
+  animation: shine 4s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  15%, 100% {
+    left: 200%;
+  }
+}
+
+.ctaSecondary {
+  padding: 1rem 2.2rem;
+  background: var(--glass-bg);
+  color: var(--fg-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 1px var(--glass-highlight), 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ctaSecondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15), 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
 /* --- Responsive Adjustments --- */
 @media (max-width: 1024px) {
   .nameLine {
@@ -374,6 +459,18 @@
   }
   .contentOverlay {
     padding: 0 1.5rem;
+    align-items: stretch;
+  }
+  .ctaButtons {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 1rem;
+  }
+  .ctaPrimary, .ctaSecondary {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.85rem;
+    width: 100%;
   }
   .controlsPanel {
     bottom: 1.5rem;

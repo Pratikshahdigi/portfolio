@@ -6,7 +6,11 @@ import { useGSAP } from "@gsap/react";
 import styles from "./VideoIntro.module.css";
 import CinematicLayer from "./CinematicLayer";
 
-export default function VideoIntro() {
+interface VideoIntroProps {
+  onScheduleCall: () => void;
+}
+
+export default function VideoIntro({ onScheduleCall }: VideoIntroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const bgVideoRef = useRef<HTMLVideoElement>(null);
   const fgVideoRef = useRef<HTMLVideoElement>(null);
@@ -82,6 +86,12 @@ export default function VideoIntro() {
           "-=1.0"
         )
         .fromTo(
+          `.${styles.ctaButtons}`,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 1.0 },
+          "-=0.9"
+        )
+        .fromTo(
           `.${styles.scrollIndicator}`,
           { opacity: 0, y: 15 },
           { opacity: 0.8, y: 0, duration: 1.5 },
@@ -96,6 +106,31 @@ export default function VideoIntro() {
     },
     { scope: containerRef }
   );
+
+  // --- Magnetic Hover Effects ---
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    gsap.to(btn, {
+      x: x * 0.35,
+      y: y * 0.35,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+    const btn = e.currentTarget;
+    gsap.to(btn, {
+      x: 0,
+      y: 0,
+      duration: 0.5,
+      ease: "elastic.out(1.1, 0.4)",
+    });
+  };
 
   // --- Control Handlers ---
   const togglePlay = () => {
@@ -146,7 +181,7 @@ export default function VideoIntro() {
         <video
           ref={bgVideoRef}
           className={styles.ambientVideo}
-          src="/video.mp4"
+          src="/portfolio/video.mp4"
           loop
           muted
           playsInline
@@ -159,7 +194,7 @@ export default function VideoIntro() {
         <video
           ref={fgVideoRef}
           className={styles.foregroundVideo}
-          src="/video.mp4"
+          src="/portfolio/video.mp4"
           loop
           muted={isMuted}
           playsInline
@@ -191,6 +226,28 @@ export default function VideoIntro() {
         <p className={styles.roleDescription}>
           I help businesses generate leads, optimize performance marketing, and dominate search engines using advanced SEO, PPC, and custom Generative AI tools.
         </p>
+
+        {/* Dynamic CTA Buttons */}
+        <div className={styles.ctaButtons}>
+          <button
+            className={styles.ctaPrimary}
+            onClick={onScheduleCall}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+          >
+            Schedule Call
+            <span className={styles.btnGlow} />
+          </button>
+          <a
+            href="/portfolio/Pratik_Shah_Resume.pdf"
+            download="Pratik_Shah_Resume.pdf"
+            className={styles.ctaSecondary}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+          >
+            Download Resume
+          </a>
+        </div>
       </div>
 
       {/* 6. Sound Badge Hint */}
