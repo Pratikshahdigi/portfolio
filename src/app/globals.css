@@ -1,0 +1,77 @@
+:root {
+  --bg-color: hsl(0, 0%, 3%);
+  --fg-color: hsl(0, 0%, 98%);
+  
+  --accent-orange: hsl(24, 100%, 55%);
+  --accent-orange-glow: rgba(255, 101, 0, 0.45);
+  --accent-orange-soft: hsl(24, 100%, 75%);
+  
+  --accent-blue-glow: rgba(13, 71, 161, 0.35);
+  --accent-blue-deep: hsl(220, 80%, 10%);
+  
+  --text-muted: hsl(0, 0%, 65%);
+  --text-subtle: hsl(0, 0%, 45%);
+  
+  --glass-bg: rgba(10, 10, 10, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.03);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 15%);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-orange);
+}
+
+/* Selection Highlight */
+::selection {
+  background: var(--accent-orange);
+  color: var(--bg-color);
+}
+
+/* Base interactive elements */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+}
+
+/* Smooth layout containers */
+section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
