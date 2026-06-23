@@ -103,6 +103,19 @@ export default function Home() {
                 );
               }
 
+              if (target.id === "photos-section") {
+                gsap.fromTo(
+                  `.${styles.photoPreviewCard}`,
+                  { opacity: 0, scale: 0.9, y: 30 },
+                  { opacity: 1, scale: 1, y: 0, stagger: 0.15, duration: 0.8, ease: "power2.out" }
+                );
+                gsap.fromTo(
+                  `#photos-section .${styles.sectionHeader} > *`,
+                  { opacity: 0, x: -30 },
+                  { opacity: 1, x: 0, stagger: 0.15, duration: 1.0, ease: "power3.out" }
+                );
+              }
+
               if (target.id === "contact-section") {
                 gsap.fromTo(
                   `.${styles.contactCard}`,
@@ -149,6 +162,7 @@ export default function Home() {
           <a href="#projects-section" className={styles.navLink}>Projects</a>
           <a href="#skills-section" className={styles.navLink}>Skills</a>
           <a href="#experience-section" className={styles.navLink}>Experience</a>
+          <a href="#photos-section" className={styles.navLink}>Photos</a>
           <a href="#contact-section" className={styles.navLink}>Contact</a>
         </div>
       </nav>
@@ -446,6 +460,73 @@ export default function Home() {
               </ul>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 5.5. Photos Preview Section */}
+      <div className={styles.showcaseSection} id="photos-section">
+        <div className={styles.sectionHeader}>
+          <span>Visual Journal</span>
+          <h2>Campaign Insights & Professional Moments.</h2>
+        </div>
+
+        <div className={styles.photosPreviewGrid}>
+          {/* Card 1: Metric Screenshot */}
+          <Link href="/photos" className={styles.photoPreviewCard} style={{ opacity: 0 }}>
+            <Image
+              src="/portfolio/photos/Screenshot_2023-08-23-12-24-32-69.jpg"
+              alt="Campaign metric"
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 768px) 100vw, 25vw"
+            />
+            <div className={styles.photoPreviewLabel}>Meta Ads Performance</div>
+          </Link>
+
+          {/* Card 2: Team Event */}
+          <Link href="/photos" className={styles.photoPreviewCard} style={{ opacity: 0 }}>
+            <Image
+              src="/portfolio/photos/IMG-20240102-WA0013.jpg"
+              alt="Team Event"
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 768px) 100vw, 25vw"
+            />
+            <div className={styles.photoPreviewLabel}>Team Milestone</div>
+          </Link>
+
+          {/* Card 3: Dashboard Analytics */}
+          <Link href="/photos" className={styles.photoPreviewCard} style={{ opacity: 0 }}>
+            <Image
+              src="/portfolio/photos/Screenshot_2023-09-22-19-03-27-76.jpg"
+              alt="Dashboard Analytics"
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 768px) 100vw, 25vw"
+            />
+            <div className={styles.photoPreviewLabel}>Google Ads Conversion</div>
+          </Link>
+
+          {/* Card 4: Office/Professional Moment */}
+          <Link href="/photos" className={styles.photoPreviewCard} style={{ opacity: 0 }}>
+            <Image
+              src="/portfolio/photos/IMG-20230823-WA0004.jpg"
+              alt="Professional Moment"
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 768px) 100vw, 25vw"
+            />
+            <div className={styles.photoPreviewLabel}>Client Onboarding Audit</div>
+          </Link>
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <Link href="/photos" className={styles.viewGalleryBtn}>
+            View Full Gallery (122 Photos)
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+            </svg>
+          </Link>
         </div>
       </div>
 
