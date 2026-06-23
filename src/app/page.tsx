@@ -50,7 +50,26 @@ export default function Home() {
                 gsap.fromTo(
                   `.${styles.statCard}`,
                   { opacity: 0, y: 30 },
-                  { opacity: 1, y: 0, stagger: 0.1, duration: 0.8, ease: "power2.out" }
+                  {
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.1,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    onComplete: () => {
+                      const cards = document.querySelectorAll(`.${styles.statCard}`);
+                      cards.forEach((card, i) => {
+                        gsap.to(card, {
+                          y: -6,
+                          duration: 3 + i * 0.8,
+                          yoyo: true,
+                          repeat: -1,
+                          ease: "sine.inOut",
+                          delay: i * 0.2
+                        });
+                      });
+                    }
+                  }
                 );
                 gsap.fromTo(
                   `#about-section .${styles.sectionHeader} > *`,
@@ -63,7 +82,26 @@ export default function Home() {
                 gsap.fromTo(
                   `.${styles.projectCard}`,
                   { opacity: 0, y: 30 },
-                  { opacity: 1, y: 0, stagger: 0.15, duration: 0.8, ease: "power2.out" }
+                  {
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.15,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    onComplete: () => {
+                      const cards = document.querySelectorAll(`.${styles.projectCard}`);
+                      cards.forEach((card, i) => {
+                        gsap.to(card, {
+                          y: -8,
+                          duration: 4 + i * 1.0,
+                          yoyo: true,
+                          repeat: -1,
+                          ease: "sine.inOut",
+                          delay: i * 0.25
+                        });
+                      });
+                    }
+                  }
                 );
                 gsap.fromTo(
                   `#projects-section .${styles.sectionHeader} > *`,
@@ -81,7 +119,26 @@ export default function Home() {
                 gsap.fromTo(
                   `.${styles.credCard}`,
                   { opacity: 0, y: 30 },
-                  { opacity: 1, y: 0, stagger: 0.15, duration: 0.8, ease: "power2.out" }
+                  {
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.15,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    onComplete: () => {
+                      const cards = document.querySelectorAll(`.${styles.credCard}`);
+                      cards.forEach((card, i) => {
+                        gsap.to(card, {
+                          y: -7,
+                          duration: 3.5 + i * 1.2,
+                          yoyo: true,
+                          repeat: -1,
+                          ease: "sine.inOut",
+                          delay: i * 0.3
+                        });
+                      });
+                    }
+                  }
                 );
                 gsap.fromTo(
                   `#skills-section .${styles.sectionHeader} > *`,
@@ -107,7 +164,27 @@ export default function Home() {
                 gsap.fromTo(
                   `.${styles.photoPreviewCard}`,
                   { opacity: 0, scale: 0.9, y: 30 },
-                  { opacity: 1, scale: 1, y: 0, stagger: 0.15, duration: 0.8, ease: "power2.out" }
+                  {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    stagger: 0.15,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    onComplete: () => {
+                      const cards = document.querySelectorAll(`.${styles.photoPreviewCard}`);
+                      cards.forEach((card, i) => {
+                        gsap.to(card, {
+                          y: -6,
+                          duration: 4.2 + i * 0.9,
+                          yoyo: true,
+                          repeat: -1,
+                          ease: "sine.inOut",
+                          delay: i * 0.2
+                        });
+                      });
+                    }
+                  }
                 );
                 gsap.fromTo(
                   `#photos-section .${styles.sectionHeader} > *`,
@@ -191,6 +268,11 @@ export default function Home() {
     <div ref={pageRef} className={styles.pageContainer}>
       {/* Cinematic Custom Follower Cursor */}
       <CustomCursor />
+
+      {/* Dynamic Background Glass Orbs for Glassmorphism Refraction */}
+      <div className="floating-orb" style={{ top: "15%", left: "10%", width: "350px", height: "350px", backgroundColor: "rgba(255, 101, 0, 0.07)", animation: "orb-float-1 25s infinite ease-in-out" }} />
+      <div className="floating-orb" style={{ top: "45%", right: "8%", width: "400px", height: "400px", backgroundColor: "rgba(13, 71, 161, 0.07)", animation: "orb-float-2 20s infinite ease-in-out" }} />
+      <div className="floating-orb" style={{ top: "75%", left: "5%", width: "380px", height: "380px", backgroundColor: "rgba(255, 101, 0, 0.05)", animation: "orb-float-1 30s infinite ease-in-out" }} />
 
       {/* Recruiter Call Booking Modal */}
       <RecruiterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

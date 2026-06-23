@@ -78,6 +78,19 @@ export default function PhotosGallery() {
           duration: 0.5,
           ease: "power2.out",
           overwrite: "auto",
+          onComplete: () => {
+            const cards = document.querySelectorAll(`.${styles.photoCard}`);
+            cards.forEach((card, i) => {
+              gsap.to(card, {
+                y: -6,
+                duration: 3.5 + i * 0.5,
+                yoyo: true,
+                repeat: -1,
+                ease: "sine.inOut",
+                delay: i * 0.1
+              });
+            });
+          }
         }
       );
 
@@ -220,6 +233,11 @@ export default function PhotosGallery() {
   return (
     <div ref={containerRef} className={styles.container}>
       <CustomCursor />
+
+      {/* Dynamic Background Glass Orbs for Glassmorphism Refraction */}
+      <div className="floating-orb" style={{ top: "20%", left: "8%", width: "320px", height: "320px", backgroundColor: "rgba(255, 101, 0, 0.07)", animation: "orb-float-1 25s infinite ease-in-out" }} />
+      <div className="floating-orb" style={{ top: "55%", right: "12%", width: "380px", height: "380px", backgroundColor: "rgba(13, 71, 161, 0.07)", animation: "orb-float-2 20s infinite ease-in-out" }} />
+
       <RecruiterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* Aesthetic glowing details */}
