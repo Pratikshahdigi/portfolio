@@ -197,6 +197,8 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .photoCard:hover {

@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import CustomCursor from "@/components/CustomCursor";
 import RecruiterModal from "@/components/RecruiterModal";
 import photosList from "./photos-list.json";
@@ -47,6 +49,10 @@ function formatFilename(filename: string) {
 }
 
 export default function PhotosGallery() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
+  const lightboxImageRef = useRef<HTMLDivElement>(null);
+
   const [filter, setFilter] = useState<"all" | "campaign" | "moment">("all");
   const [visibleCount, setVisibleCount] = useState<number>(16);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
@@ -57,6 +63,90 @@ export default function PhotosGallery() {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const minSwipeDistance = 50;
+
+  // Stagger animate gallery cards + 3D Hover Tilt Effects
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        `.${styles.photoCard}`,
+        { opacity: 0, y: 30, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.02,
+          duration: 0.5,
+          ease: "power2.out",
+          overwrite: "auto",
+        }
+      );
+
+      const cards = document.querySelectorAll(`.${styles.photoCard}`);
+      const tiltCleanups: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> = [];
+
+      cards.forEach((card) => {
+        const el = card as HTMLElement;
+        const move = (e: MouseEvent) => {
+          const rect = el.getBoundingClientRect();
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          const rotateX = (yc - (e.clientY - rect.top)) / (yc / 6);
+          const rotateY = ((e.clientX - rect.left) - xc) / (xc / 6);
+          gsap.to(el, {
+            rotateX: rotateX,
+            rotateY: rotateY,
+            scale: 1.02,
+            transformPerspective: 800,
+            ease: "power2.out",
+            duration: 0.3,
+          });
+        };
+        const leave = () => {
+          gsap.to(el, {
+            rotateX: 0,
+            rotateY: 0,
+            scale: 1,
+            ease: "power3.out",
+            duration: 0.5,
+          });
+        };
+        el.addEventListener("mousemove", move);
+        el.addEventListener("mouseleave", leave);
+        tiltCleanups.push({ el, move, leave });
+      });
+
+      return () => {
+        tiltCleanups.forEach(({ el, move, leave }) => {
+          el.removeEventListener("mousemove", move);
+          el.removeEventListener("mouseleave", leave);
+        });
+      };
+    },
+    { dependencies: [filter, visibleCount], scope: containerRef }
+  );
+
+  // Animate Lightbox transitions
+  useEffect(() => {
+    if (activeIdx !== null) {
+      const timer = setTimeout(() => {
+        if (lightboxRef.current) {
+          gsap.fromTo(
+            lightboxRef.current,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.3, ease: "power2.out" }
+          );
+        }
+        if (lightboxImageRef.current) {
+          gsap.fromTo(
+            lightboxImageRef.current,
+            { scale: 0.9, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.45, ease: "power3.out" }
+          );
+        }
+      }, 30);
+      return () => clearTimeout(timer);
+    }
+  }, [activeIdx]);
 
   // Filter photos list
   const filteredPhotos = photosList.filter((item) => {
@@ -128,7 +218,7 @@ export default function PhotosGallery() {
   };
 
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       <CustomCursor />
       <RecruiterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
@@ -256,6 +346,7 @@ export default function PhotosGallery() {
       {/* Lightbox Overlay */}
       {activeIdx !== null && (
         <div
+          ref={lightboxRef}
           className={styles.lightbox}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -312,6 +403,7 @@ export default function PhotosGallery() {
           {/* Main Large Image */}
           <div className={styles.lightboxImageWrapper}>
             <div
+              ref={lightboxImageRef}
               className={`${styles.imageContainer} ${zoomLevel ? styles.zoomed : ""}`}
               onClick={() => setZoomLevel(!zoomLevel)}
             >

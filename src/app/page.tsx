@@ -139,7 +139,50 @@ export default function Home() {
       const sections = document.querySelectorAll(`.${styles.showcaseSection}`);
       sections.forEach((sec) => observer.observe(sec));
 
-      return () => observer.disconnect();
+      // 3D Card Hover Tilt Effects
+      const tiltElements = document.querySelectorAll(
+        `.${styles.projectCard}, .${styles.photoPreviewCard}, .${styles.credCard}, .${styles.statCard}`
+      );
+      const tiltCleanups: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> = [];
+
+      tiltElements.forEach((el) => {
+        const element = el as HTMLElement;
+        const move = (e: MouseEvent) => {
+          const rect = element.getBoundingClientRect();
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          const rotateX = (yc - (e.clientY - rect.top)) / (yc / 6);
+          const rotateY = ((e.clientX - rect.left) - xc) / (xc / 6);
+          gsap.to(element, {
+            rotateX: rotateX,
+            rotateY: rotateY,
+            scale: 1.02,
+            transformPerspective: 800,
+            ease: "power2.out",
+            duration: 0.35,
+          });
+        };
+        const leave = () => {
+          gsap.to(element, {
+            rotateX: 0,
+            rotateY: 0,
+            scale: 1,
+            ease: "power3.out",
+            duration: 0.5,
+          });
+        };
+        element.addEventListener("mousemove", move);
+        element.addEventListener("mouseleave", leave);
+        tiltCleanups.push({ el: element, move, leave });
+      });
+
+      return () => {
+        observer.disconnect();
+        tiltCleanups.forEach(({ el, move, leave }) => {
+          el.removeEventListener("mousemove", move);
+          el.removeEventListener("mouseleave", leave);
+        });
+      };
     },
     { scope: pageRef }
   );
@@ -159,7 +202,7 @@ export default function Home() {
         </div>
         <div className={styles.navLinks}>
           <a href="#about-section" className={styles.navLink}>About</a>
-          <a href="#projects-section" className={styles.navLink}>Projects</a>
+          <a href="#projects-section" className={styles.navLink}>Work</a>
           <a href="#skills-section" className={styles.navLink}>Skills</a>
           <a href="#experience-section" className={styles.navLink}>Experience</a>
           <a href="#photos-section" className={styles.navLink}>Photos</a>
@@ -211,7 +254,7 @@ export default function Home() {
       {/* NEW: Project Showcase Section */}
       <div className={styles.showcaseSection} id="projects-section">
         <div className={styles.sectionHeader}>
-          <span>Case Studies</span>
+          <span>Work & Case Studies</span>
           <h2>Proven Marketing Campaigns & Visual Dashboards.</h2>
         </div>
 
