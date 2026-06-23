@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import VideoIntro from "@/components/VideoIntro";
 import CustomCursor from "@/components/CustomCursor";
 import RecruiterModal from "@/components/RecruiterModal";
+import MarketingFunnel3D from "@/components/MarketingFunnel3D";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -325,11 +326,28 @@ export default function Home() {
           </div>
         </div>
 
-        <div style={{ maxWidth: "1000px", width: "100%", marginTop: "2rem" }}>
-          <p style={{ fontSize: "1.2rem", lineHeight: "1.7", color: "var(--text-muted)", fontWeight: 300 }}>
-            Results-driven <strong>Digital Marketing Team Leader</strong> with extensive experience leading performance marketing, SEO strategy, social media management, and paid advertising funnels. 
-            I specialize in orchestrating conversion-focused campaigns across Meta, Google, and LinkedIn Ads, building efficient systems that drive lead generation, community engagement, and measurable ROI.
-          </p>
+        <div style={{ maxWidth: "1000px", width: "100%", marginTop: "3rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
+            {/* Description Text */}
+            <p style={{ fontSize: "1.2rem", lineHeight: "1.7", color: "var(--text-muted)", fontWeight: 300 }}>
+              Results-driven <strong>Digital Marketing Team Leader</strong> with extensive experience leading performance marketing, SEO strategy, social media management, and paid advertising funnels. 
+              I specialize in orchestrating conversion-focused campaigns across Meta, Google, and LinkedIn Ads, building efficient systems that drive lead generation, community engagement, and measurable ROI.
+            </p>
+
+            {/* 3D Marketing Funnel Visualizer */}
+            <div style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)", paddingTop: "3rem" }}>
+              <h3 style={{ 
+                fontSize: "1rem", 
+                color: "var(--text-subtle)", 
+                textTransform: "uppercase", 
+                letterSpacing: "0.15em", 
+                marginBottom: "2rem" 
+              }}>
+                Interactive 3D Funnel Flow (Data Streams & ROAS tracking)
+              </h3>
+              <MarketingFunnel3D />
+            </div>
+          </div>
         </div>
       </div>
 
